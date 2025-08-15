@@ -26,7 +26,6 @@
             z-index: 999;
         }
 
-        /* NEW STYLES FOR CONTROLS */
         #controls {
             position: fixed;
             bottom: 20px;
@@ -46,7 +45,7 @@
             color: white;
             border-radius: 10px;
             cursor: pointer;
-            user-select: none; /* Prevent text selection on mobile */
+            user-select: none;
         }
     </style>
 </head>
@@ -73,10 +72,11 @@
         const ctx = canvas.getContext("2d");
         const jumpSound = document.getElementById('jumpSound');
 
-        // NEW: Get button elements
         const leftButton = document.getElementById('leftButton');
         const rightButton = document.getElementById('rightButton');
         const jumpButton = document.getElementById('jumpButton');
+        // NEW: Get the controls element
+        const controls = document.getElementById('controls');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -127,18 +127,26 @@
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false);
 
-        // NEW: Add event listeners for buttons
-        leftButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; });
+        leftButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys['ArrowLeft'] = true;
+        });
         leftButton.addEventListener('touchend', () => keys['ArrowLeft'] = false);
         leftButton.addEventListener('mousedown', () => keys['ArrowLeft'] = true);
         leftButton.addEventListener('mouseup', () => keys['ArrowLeft'] = false);
 
-        rightButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; });
+        rightButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys['ArrowRight'] = true;
+        });
         rightButton.addEventListener('touchend', () => keys['ArrowRight'] = false);
         rightButton.addEventListener('mousedown', () => keys['ArrowRight'] = true);
         rightButton.addEventListener('mouseup', () => keys['ArrowRight'] = false);
 
-        jumpButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys[' '] = true; });
+        jumpButton.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            keys[' '] = true;
+        });
         jumpButton.addEventListener('touchend', () => keys[' '] = false);
         jumpButton.addEventListener('mousedown', () => keys[' '] = true);
         jumpButton.addEventListener('mouseup', () => keys[' '] = false);
@@ -186,6 +194,8 @@
                 let vid = document.getElementById("failVideo");
                 vid.style.display = "block";
                 vid.play();
+                // NEW: Hide the controls
+                controls.style.display = "none";
             }
         }
 
