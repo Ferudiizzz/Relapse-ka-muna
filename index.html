@@ -25,6 +25,29 @@
             display: none;
             z-index: 999;
         }
+
+        /* NEW STYLES FOR CONTROLS */
+        #controls {
+            position: fixed;
+            bottom: 20px;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            padding: 0 20px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
+        #controls button {
+            font-size: 1.5em;
+            padding: 10px 20px;
+            border: none;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            user-select: none; /* Prevent text selection on mobile */
+        }
     </style>
 </head>
 
@@ -37,12 +60,23 @@
 
     <canvas id="gameCanvas"></canvas>
 
+    <div id="controls">
+        <div>
+            <button id="leftButton">◀</button>
+            <button id="rightButton">▶</button>
+        </div>
+        <button id="jumpButton">Jump</button>
+    </div>
+
     <script>
         const canvas = document.getElementById("gameCanvas");
         const ctx = canvas.getContext("2d");
-
-        // ADD THIS CONSTANT
         const jumpSound = document.getElementById('jumpSound');
+
+        // NEW: Get button elements
+        const leftButton = document.getElementById('leftButton');
+        const rightButton = document.getElementById('rightButton');
+        const jumpButton = document.getElementById('jumpButton');
 
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -93,6 +127,22 @@
         window.addEventListener("keydown", e => keys[e.key] = true);
         window.addEventListener("keyup", e => keys[e.key] = false);
 
+        // NEW: Add event listeners for buttons
+        leftButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowLeft'] = true; });
+        leftButton.addEventListener('touchend', () => keys['ArrowLeft'] = false);
+        leftButton.addEventListener('mousedown', () => keys['ArrowLeft'] = true);
+        leftButton.addEventListener('mouseup', () => keys['ArrowLeft'] = false);
+
+        rightButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys['ArrowRight'] = true; });
+        rightButton.addEventListener('touchend', () => keys['ArrowRight'] = false);
+        rightButton.addEventListener('mousedown', () => keys['ArrowRight'] = true);
+        rightButton.addEventListener('mouseup', () => keys['ArrowRight'] = false);
+
+        jumpButton.addEventListener('touchstart', (e) => { e.preventDefault(); keys[' '] = true; });
+        jumpButton.addEventListener('touchend', () => keys[' '] = false);
+        jumpButton.addEventListener('mousedown', () => keys[' '] = true);
+        jumpButton.addEventListener('mouseup', () => keys[' '] = false);
+
         function update() {
             // Gravity
             player.vy += gravity;
@@ -127,7 +177,6 @@
             // Jump
             if (keys[" "] && player.grounded) {
                 player.vy = jumpPower;
-                // ADD THESE LINES
                 jumpSound.currentTime = 0;
                 jumpSound.play();
             }
